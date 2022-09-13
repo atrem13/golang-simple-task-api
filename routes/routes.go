@@ -14,8 +14,8 @@ func SetupRoutes(db *gorm.DB) *gin.Engine {
 	})
 	r.GET("/tasks", controllers.FindTasks)
 	r.POST("/tasks", controllers.CreateTasks)
-	r.GET("/tasks/:id", controllers.FindTasks)
-	r.PATCH("/tasks/:id", controllers.UpdateTasks)
-	r.DELETE("/tasks/:id", controllers.DeleteTasks)
+	r.GET("/tasks/:id", controllers.FindTask)
+	r.PATCH("/tasks/:id", controllers.UpdateTask)
+	r.DELETE("/tasks/:id", controllers.DeleteTask)
 	return r
 }

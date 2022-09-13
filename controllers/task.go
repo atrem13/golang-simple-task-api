@@ -10,13 +10,13 @@ import (
 )
 
 type CreateTaskInput struct {
-	AssingedTo string `json:"assignedTo"`
+	AssignedTo string `json:"assignedTo"`
 	Task       string `json:"task"`
 	Deadline   string `json:"deadline`
 }
 
 type UpdateTaskInput struct {
-	AssingedTo string `json:"assignedTo"`
+	AssignedTo string `json:"assignedTo"`
 	Task       string `json:"task"`
 	Deadline   string `json:"deadline`
 }
@@ -26,6 +26,8 @@ func FindTasks(c *gin.Context) {
 	db := c.MustGet("db").(*gorm.DB)
 	var tasks []models.Task
 	db.Find(&tasks)
+
+	c.JSON(http.StatusOK, gin.H{"data": tasks})
 }
 
 // create task
@@ -36,16 +38,11 @@ func CreateTasks(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	// initiate data
-	date := "2022-09-02"
+	date := "2006-01-02"
 	deadline, _ := time.Parse(date, input.Deadline)
 
-	// create task
-	task := models.Task{
-		AssingedTo: input.AssingedTo,
-		Task:       input.Task,
-		Deadline:   deadline,
-	}
+	// Create task
+	task := models.Task{AssignedTo: input.AssignedTo, Task: input.Task, Deadline: deadline}
 
 	db := c.MustGet("db").(*gorm.DB)
 	db.Create(&task)
@@ -88,7 +85,7 @@ func UpdateTask(c *gin.Context) {
 
 	var updatedInput models.Task
 	updatedInput.Deadline = deadline
-	updatedInput.AssingedTo = input.AssingedTo
+	updatedInput.AssignedTo = input.AssignedTo
 	updatedInput.Task = input.Task
 
 	db.Model(&task).Updates(updatedInput)
